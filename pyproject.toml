@@ -1,0 +1,23 @@
+[project]
+name = "zhttp"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Wisnu Box",email = "hwisnu222@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.8,<=3.13.5"
+dependencies = [
+    "typer (>=0.16.0,<0.17.0)",
+    "requests (>=2.32.4,<3.0.0)",
+    "pyyaml (>=6.0.2,<7.0.0)",
+    "inquirerpy (>=0.3.4,<0.4.0)",
+    "rich (>=14.1.0,<15.0.0)",
+    "jinja2 (>=3.1.6,<4.0.0)",
+    "pygments (>=2.19.2,<3.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
