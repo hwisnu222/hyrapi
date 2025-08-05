@@ -1,4 +1,6 @@
 import base64
+from rich.console import Console
+from rich.table import Table
 import yaml
 from pathlib import Path
 from typing import List, Union
@@ -36,6 +38,21 @@ class Util:
             return config
         else:
             raise ValueError("Config must be a dict or list of dicts")
+
+    def dict_to_table(self, data):
+        console = Console()
+        table = Table(show_header=True, header_style="bold green")
+
+        # headers
+        for key in data[0].keys():
+            table.add_column(key)
+
+        # rows
+        for item in data:
+            row = [str(item.get(key, "")) for key in data[0].keys()]
+            table.add_row(*row)
+
+        console.print(table)
 
     def filter_variables(self, variables={}):
         filtered = {

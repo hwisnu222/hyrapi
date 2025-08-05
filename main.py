@@ -18,6 +18,12 @@ app = typer.Typer()
 def main(
     config: str = typer.Option(..., "--collection", "-c", help="YAML request file"),
     env: str = typer.Option(None, "--environment", "-e", help="environment server"),
+    show_servers: bool = typer.Option(
+        False, "--servers", "-s", is_flag=True, help="show list server"
+    ),
+    show_paths: bool = typer.Option(
+        False, "--paths", "-p", is_flag=True, help="Show all paths"
+    ),
 ):
     util = Util()
 
@@ -44,6 +50,13 @@ def main(
     index_env = next(
         (i for i, server in enumerate(servers) if server["name"] == env), 0
     )
+    if show_servers:
+        util.dict_to_table(servers)
+        raise typer.Exit()
+
+    if show_paths:
+        util.dict_to_table(paths)
+        raise typer.Exit()
 
     for i, req in enumerate(paths):
         method = req.get("method", "GET").upper()
@@ -55,7 +68,7 @@ def main(
     index = inquirer.fuzzy(
         message=f"Select a request to send({servers[index_env]["name"]}):",
         choices=choices,
-        instruction="(Use arrow keys or search)",
+        instruction="(type to filter, ↑↓ to select)",
     ).execute()
 
     path = paths[index]
