@@ -11,7 +11,7 @@ You can install `hyr` in two ways:
 
 ### Method 1: Manual Installation
 
-```
+```bash
 git clone https://github.com/hwisnu222/hyrapi.git
 cd hyrapi
 make build
@@ -22,7 +22,7 @@ sudo mv hyr /usr/local/bin/
 
 ### Method 2: One-Line Install Script
 
-```
+```bash
 curl -fsSL https://raw.githubusercontent.com/hwisnu222/hyrapi/main/install.sh | sh
 ```
 
@@ -30,13 +30,13 @@ curl -fsSL https://raw.githubusercontent.com/hwisnu222/hyrapi/main/install.sh | 
 
 To use `hyrapi`, you need to provide a YAML collection file:
 
-```
+```bash
 hyr -c collections.yml
 ```
 
 ## Sample `collections.yml`
 
-```
+```yaml
 servers:
   - url: http://localhost:3000/api/v1
     name: development
@@ -106,7 +106,7 @@ The `auth` section allows you to configure how each request is authenticated. Be
 
 #### Bearer Token
 
-```
+```yaml
 auth:
   type: bearer
   token: "{{token}}"
@@ -116,7 +116,7 @@ Sends an `Authorization: Bearer <token>` header.
 
 #### Basic Auth
 
-```
+```yaml
 auth:
   type: basic
   username: admin
@@ -127,7 +127,7 @@ Sends an `Authorization: Basic <base64-encoded-credentials>` header.
 
 #### API Key (Header-based)
 
-```
+```yaml
 auth:
   type: apikey
   api_key: abc123
@@ -138,7 +138,7 @@ Sends `X-API-Key: abc123` in the request header. The header name can be customiz
 
 #### Digest Auth
 
-```
+```yaml
 auth:
   type: digest
   username: admin
