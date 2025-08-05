@@ -44,5 +44,5 @@ build/
 Thumbs.db
 
 .questionary-history.json
-*.yaml
-*.yml
+collections.yaml
+collections.yml

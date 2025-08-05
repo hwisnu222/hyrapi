@@ -1,0 +1,41 @@
+name: Build and Release with Poetry
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+
+      - name: Configure Poetry
+        run: poetry config virtualenvs.create false
+
+      - name: Install dependencies
+        run: poetry install --no-interaction --no-root
+
+      - name: Install PyInstaller
+        run: pip install pyinstaller
+
+      - name: Build binary with PyInstaller
+        run: make build
+
+      - name: Upload binary to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/hyr
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACTION_TOKEN }}
