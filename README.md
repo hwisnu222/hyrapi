@@ -39,10 +39,23 @@ hyr -c collections.yml
 ```
 servers:
   - url: http://localhost:3000/api/v1
-    description: development
+    name: development
+    description: development server
+  - url: http://example.com/api/v1
+    name: staging
+    description: staging server
+  - url: http://example.com/api/v1
+    name: production
+    description: production server
 
 variables:
-  token: token
+  global_variable: value
+  development:
+    token: value
+  staging:
+    token: value
+  production:
+    token: value
 
 paths:
 
