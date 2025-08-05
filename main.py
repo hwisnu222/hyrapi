@@ -10,6 +10,8 @@ from pygments.formatters import TerminalFormatter
 from rich.console import Console
 import json
 
+from utils import Util
+
 app = typer.Typer()
 
 
@@ -18,6 +20,7 @@ def main(
     config: str = typer.Option(..., "--collection", "-c", help="YAML request file"),
     hostname: str = typer.Option(..., "--hostname", "-h", help="host server api"),
 ):
+    util = Util()
 
     try:
         data = load_config(config)[0]
@@ -48,14 +51,19 @@ def main(
         try:
             typer.echo("----------------------------------")
             for key, value in response.headers.items():
-                print(f"[green]{key}[/green]: {value}")
+                print(f"[green]{key}[/green]: [white]{value}[/white]")
             typer.echo("----------------------------------\n")
+            print(
+                f"[bold]statusCode:[/bold] [cyan]{response.status_code}-{response.reason}[/cyan] [bold]Time:[/bold] [cyan]{response.elapsed.total_seconds():.3f}s[/cyan] [bold]Size:[/bold] [cyan]{util.format_size(len(response.content))}[/cyan]"
+            )
+
             json_str = json.dumps(response.json(), indent=2)
 
             highlighted = highlight(json_str, JsonLexer(), TerminalFormatter())
 
             text = Text.from_ansi(highlighted, overflow="fold", no_wrap=False)
             console = Console()
+            print("[grey]Response[/grey]")
             console.print(text)
         except:
             typer.echo(response.text)
