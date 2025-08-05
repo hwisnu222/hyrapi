@@ -18,7 +18,6 @@ app = typer.Typer()
 @app.command()
 def main(
     config: str = typer.Option(..., "--collection", "-c", help="YAML request file"),
-    hostname: str = typer.Option(..., "--hostname", "-h", help="host server api"),
 ):
     util = Util()
 
@@ -34,7 +33,8 @@ def main(
     for i, req in enumerate(paths):
         method = req.get("method", "GET").upper()
         name = req.get("name", "unknown-name")
-        label = f"[{method}] {name}"
+        endpoint = req.get("endpoint", "-")
+        label = f"[{method}] {name} {endpoint}"
         choices.append({"name": label, "value": i})
 
     index = inquirer.fuzzy(
@@ -44,7 +44,7 @@ def main(
     ).execute()
 
     path = paths[index]
-    client = Client(hostname, path, data)
+    client = Client(path, data)
 
     try:
         response = client.send()
@@ -54,7 +54,7 @@ def main(
                 print(f"[green]{key}[/green]: [white]{value}[/white]")
             typer.echo("----------------------------------\n")
             print(
-                f"[bold]statusCode:[/bold] [cyan]{response.status_code}-{response.reason}[/cyan] [bold]Time:[/bold] [cyan]{response.elapsed.total_seconds():.3f}s[/cyan] [bold]Size:[/bold] [cyan]{util.format_size(len(response.content))}[/cyan]"
+                f"[bold]Status:[/bold] [cyan]{response.status_code}-{response.reason}[/cyan] [bold]Time:[/bold] [cyan]{response.elapsed.total_seconds():.3f}s[/cyan] [bold]Size:[/bold] [cyan]{util.format_size(len(response.content))}[/cyan]"
             )
 
             json_str = json.dumps(response.json(), indent=2)

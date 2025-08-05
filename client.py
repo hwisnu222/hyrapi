@@ -1,9 +1,11 @@
 import requests
 
+from utils import Util
+
 
 class Client:
-    def __init__(self, host, path, config: dict):
-        self.host = host
+    def __init__(self, path, config: dict):
+        self.util = Util()
         self.path = path
         self.config = config
 
@@ -15,13 +17,17 @@ class Client:
         method = self.path.get("method", "GET").upper()
         headers = self.path.get("headers", {})
         body = self.path.get("body", {})
+        header_auth, request_auth = self.util.load_auth_header(
+            self.path.get("auth", {})
+        )
 
         response = requests.request(
             method=method,
             url=self.safe_join(
                 self.config.get("servers", [{}])[0].get("url", ""), endpoint
             ),
-            headers=headers,
+            headers={**headers, **header_auth},
+            auth=request_auth,
             json=body if method in ["POST", "PUT", "PATCH"] else None,
             params=body if method == "GET" else None,
         )
