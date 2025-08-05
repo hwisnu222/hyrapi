@@ -84,6 +84,53 @@ List of API requests:
   - `token`: value or reference using `{{variable}}`
 - `headers`: optional headers to send with the request
 
+### Authentication (`auth`)
+
+The `auth` section allows you to configure how each request is authenticated. Below are the supported types and their configuration:
+
+#### Bearer Token
+
+```
+auth:
+  type: bearer
+  token: "{{token}}"
+```
+
+Sends an `Authorization: Bearer <token>` header.
+
+#### Basic Auth
+
+```
+auth:
+  type: basic
+  username: admin
+  password: secret
+```
+
+Sends an `Authorization: Basic <base64-encoded-credentials>` header.
+
+#### API Key (Header-based)
+
+```
+auth:
+  type: apikey
+  api_key: abc123
+  api_key_header: X-API-Key
+```
+
+Sends `X-API-Key: abc123` in the request header. The header name can be customized using `api_key_header`.
+
+#### Digest Auth
+
+```
+auth:
+  type: digest
+  username: admin
+  password: secret
+```
+
+Supports HTTP Digest Authentication.
+
 ## Features
 
 - YAML-based API collection
