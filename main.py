@@ -6,7 +6,7 @@ from InquirerPy import inquirer
 from rich import print
 from pygments import highlight
 from pygments.lexers import JsonLexer
-from pygments.formatters import TerminalFormatter
+from pygments.formatters import Terminal256Formatter
 from rich.console import Console
 import json
 
@@ -30,6 +30,15 @@ def main(
     # generate list of choices
     choices = []
     paths = data.get("paths")
+
+    if not paths:
+        typer.echo("there is not paths on collection")
+        raise typer.Exit()
+
+    if not data.get("servers"):
+        typer.echo("Please set server to collection")
+        raise typer.Exit()
+
     for i, req in enumerate(paths):
         method = req.get("method", "GET").upper()
         name = req.get("name", "unknown-name")
@@ -44,6 +53,7 @@ def main(
     ).execute()
 
     path = paths[index]
+
     client = Client(path, data)
 
     try:
@@ -59,7 +69,9 @@ def main(
 
             json_str = json.dumps(response.json(), indent=2)
 
-            highlighted = highlight(json_str, JsonLexer(), TerminalFormatter())
+            highlighted = highlight(
+                json_str, JsonLexer(), Terminal256Formatter(style="solarized-dark")
+            )
 
             text = Text.from_ansi(highlighted, overflow="fold", no_wrap=False)
             console = Console()
