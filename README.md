@@ -2,6 +2,9 @@
 
 Hyrapi is a CLI-based REST API client powered by a YAML collection file. It's designed to simplify making HTTP requests by organizing endpoints, headers, tokens, and parameters in a single configuration file.
 
+![path](./assets/path-list.png)
+![request](./assets/request.png)
+
 ## Installation
 
 You can install `hyr` in two ways:
