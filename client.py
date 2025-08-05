@@ -12,7 +12,7 @@ class Client:
     def safe_join(self, base: str, path: str) -> str:
         return base.rstrip("/") + "/" + path.lstrip("/")
 
-    def send(self):
+    def send(self, index_env=0):
         endpoint = self.path.get("endpoint", "/")
         method = self.path.get("method", "GET").upper()
         headers = self.path.get("headers", {})
@@ -24,7 +24,7 @@ class Client:
         response = requests.request(
             method=method,
             url=self.safe_join(
-                self.config.get("servers", [{}])[0].get("url", ""), endpoint
+                self.config.get("servers", [{}])[index_env].get("url", ""), endpoint
             ),
             headers={**headers, **header_auth},
             auth=request_auth,
