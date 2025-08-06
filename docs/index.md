@@ -7,9 +7,6 @@
 </div>
 **Hyrapi** is a CLI-based REST API client powered by a YAML collection file. It helps you organize and execute API requests by grouping endpoints, headers, tokens, and authentication configs in a single file.
 
-![path](../assets/path-list.png)
-![request](../assets/request.png)
-
 ---
 
 ## Installation
