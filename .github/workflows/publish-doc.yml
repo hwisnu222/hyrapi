@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+# permissions for write to gh-pages branch
+permissions:
+  contents: write
 
 jobs:
   deploy:
