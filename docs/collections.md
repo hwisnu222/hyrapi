@@ -114,3 +114,24 @@ paths:
       username: admin
       password: secret
 ```
+
+## Multipart Form Data
+
+To send `multipart/form-data` (typically for file upload), define the `body` fields and file paths:
+
+```yaml
+paths:
+  - endpoint: /upload
+    name: upload
+    method: POST
+    headers:
+      Content-Type: multipart/form-data
+    body:
+      title: lorem
+      file: "./path/file.png"
+```
+
+- `headers.Content-Type`: Should be set to `multipart/form-data` to indicate file upload.
+- `body`: Key-value pairs to be sent. For file fields, use a relative or absolute path to the file.
+
+> Note: Files are automatically detected if the value is a valid path to a local file.
