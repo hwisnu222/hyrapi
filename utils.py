@@ -9,6 +9,9 @@ from requests.auth import HTTPDigestAuth
 
 
 class Util:
+    def safe_join(self, base: str, path: str) -> str:
+        return base.rstrip("/") + "/" + path.lstrip("/")
+
     def load_config(self, file_path: Union[str, Path], env: str) -> List[dict]:
         util = Util()
 

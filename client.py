@@ -11,9 +11,6 @@ class Client:
         self.path = path
         self.config = config
 
-    def safe_join(self, base: str, path: str) -> str:
-        return base.rstrip("/") + "/" + path.lstrip("/")
-
     def send(self, index_env=0):
         response = None
         endpoint = self.path.get("endpoint", "/")
@@ -26,7 +23,7 @@ class Client:
 
         kwargs = {
             "method": method,
-            "url": self.safe_join(
+            "url": self.util.safe_join(
                 self.config.get("servers", [{}])[index_env].get("url", ""), endpoint
             ),
             "auth": request_auth,

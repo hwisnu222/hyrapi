@@ -18,11 +18,15 @@ app = typer.Typer()
 def main(
     config: str = typer.Option(..., "--collection", "-c", help="YAML request file"),
     env: str = typer.Option(None, "--environment", "-e", help="environment server"),
+    request_name: str = typer.Option(None, "--name", "-n", help="request name"),
     show_servers: bool = typer.Option(
         False, "--servers", "-s", is_flag=True, help="show list server"
     ),
     show_paths: bool = typer.Option(
         False, "--paths", "-p", is_flag=True, help="Show all paths"
+    ),
+    quiet: bool = typer.Option(
+        False, "--quiet", "-q", is_flag=True, help="quiet response"
     ),
 ):
     util = Util()
@@ -65,11 +69,20 @@ def main(
         label = f"[{method}] {name} {endpoint}"
         choices.append({"name": label, "value": i})
 
-    index = inquirer.fuzzy(
-        message=f"Select a request to send({servers[index_env]["name"]}):",
-        choices=choices,
-        instruction="(type to filter, ↑↓ to select)",
-    ).execute()
+    if request_name:
+        index = next(
+            (i for i, item in enumerate(paths) if item["name"] == request_name), -1
+        )
+        if index == -1:
+            typer.echo("request name is not found")
+            raise typer.Exit()
+
+    else:
+        index = inquirer.fuzzy(
+            message=f"Select a request to send({servers[index_env]["name"]}):",
+            choices=choices,
+            instruction="(type to filter, ↑↓ to select)",
+        ).execute()
 
     path = paths[index]
     client = Client(path, data)
@@ -77,13 +90,20 @@ def main(
     try:
         response = client.send(index_env)
         try:
-            typer.echo("----------------------------------")
-            for key, value in response.headers.items():
-                print(f"[green]{key}[/green]: [white]{value}[/white]")
-            typer.echo("----------------------------------\n")
-            print(
-                f"[bold]Status:[/bold] [cyan]{response.status_code}-{response.reason}[/cyan] [bold]Time:[/bold] [cyan]{response.elapsed.total_seconds():.3f}s[/cyan] [bold]Size:[/bold] [cyan]{util.format_size(len(response.content))}[/cyan]"
-            )
+
+            console = Console()
+            if not quiet:
+                for key, value in response.headers.items():
+                    print(f"[green]{key}[/green]: [white]{value}[/white]")
+
+                print(
+                    f"\nRequest: {util.safe_join(servers[index_env]['url'], path['endpoint'])}\n"
+                    f"Method: {path['method']}\n"
+                    f"[bold]Status:[/bold] [cyan]{response.status_code}-{response.reason}[/cyan] "
+                    f"[bold]Time:[/bold] [cyan]{response.elapsed.total_seconds():.3f}s[/cyan] "
+                    f"[bold]Size:[/bold] [cyan]{util.format_size(len(response.content))}[/cyan]\n\n"
+                    f"[grey]Response[/grey]"
+                )
 
             # formatter response
             json_str = json.dumps(response.json(), indent=2)
@@ -93,8 +113,6 @@ def main(
             )
 
             text = Text.from_ansi(highlighted, overflow="fold", no_wrap=False)
-            console = Console()
-            print("[grey]Response[/grey]")
             console.print(text)
         except:
             typer.echo(response.text)
