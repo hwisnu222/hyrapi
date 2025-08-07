@@ -2,7 +2,7 @@
   <h1>Hyrapi</h1>
   <div align="center">
     <img src="https://img.shields.io/badge/CLI-Rest%20API-green?style=flat-square" alt="Badge">
-    <img src="https://img.shields.io/badge/Version-v1.1.0-orange?style=flat-square" alt="Badge">
+    <img src="https://img.shields.io/badge/Version-1.2.0-orange?style=flat-square" alt="Badge">
   </div>
 </div>
 

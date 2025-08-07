@@ -1,6 +1,6 @@
 [project]
 name = "hyrapi"
-version = "0.1.0"
+version = "1.2.0"
 description = ""
 authors = [
     {name = "Wisnu Box",email = "hwisnu222@gmail.com"}
@@ -23,3 +23,28 @@ dependencies = [
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.bumpver]
+current_version = "1.2.0"
+version_pattern = "MAJOR.MINOR.PATCH"
+commit_message = "bump version {old_version} -> {new_version}"
+tag_message = "{new_version}"
+tag_scope = "default"
+pre_commit_hook = ""
+post_commit_hook = ""
+commit = true
+tag = true
+push = true
+
+[tool.bumpver.file_patterns]
+"pyproject.toml" = [
+    'current_version = "{version}"',
+]
+"README.md" = [
+    "{version}",
+    "{pep440_version}",
+]
+"docs/index.md" = [
+  "{version}"
+]
+
