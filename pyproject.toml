@@ -41,10 +41,10 @@ push = true
     'version = "{version}"',
 ]
 "README.md" = [
-    "Version-{version}-orange",
+    'https://img.shields.io/badge/Version-{version}-orange?style=flat-square',
     "{pep440_version}",
 ]
 "docs/index.md" = [
-    "Version-{version}-orange",
+    'https://img.shields.io/badge/Version-{version}-orange?style=flat-square',
 ]
 
