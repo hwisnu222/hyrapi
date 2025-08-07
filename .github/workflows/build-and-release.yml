@@ -3,7 +3,7 @@ name: Build and Release with Poetry
 on:
   push:
     tags:
-      - "v*"
+      - "*"
 
 jobs:
   build:
